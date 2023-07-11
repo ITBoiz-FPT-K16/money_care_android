@@ -1,4 +1,4 @@
-package com.example.money_care_android;
+package com.itboiz.money_care_android;
 
 import android.content.Context;
 

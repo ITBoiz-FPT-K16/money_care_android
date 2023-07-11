@@ -166,12 +166,6 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         gClient = GoogleSignIn.getClient(this, this.gso);
 
-        GoogleSignInAccount gAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (gAccount != null) {
-            finish();
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
         googleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,11 +185,11 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+                Log.d(TAG2, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
+                Log.w(TAG2, "Google sign in failed", e);
             }
         }
     }

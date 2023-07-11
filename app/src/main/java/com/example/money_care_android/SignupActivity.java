@@ -55,7 +55,7 @@ public class SignupActivity extends AppCompatActivity {
                                 startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                             } else {
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(SignupActivity.this, "SignUp Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignupActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

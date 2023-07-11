@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.money_care_android'
+    namespace 'com.itboiz.money_care_android'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.money_care_android"
+        applicationId "com.itboiz.money_care_android"
         minSdk 24
         targetSdk 33
         versionCode 1

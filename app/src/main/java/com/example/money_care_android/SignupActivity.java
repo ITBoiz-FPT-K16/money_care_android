@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private FirebaseAuth auth;
+    private static final String TAG = "EmailPassword";
+    private FirebaseAuth mAuth;
     private EditText signupEmail, signupPassword;
     private Button signupButton;
     private TextView loginRedirectText;
@@ -26,9 +28,8 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
-
-        auth = FirebaseAuth.getInstance();
+        setContentView(R.layout.activity_signup);
+        mAuth = FirebaseAuth.getInstance();
         signupEmail = findViewById(R.id.signup_email);
         signupPassword = findViewById(R.id.signup_password);
         signupButton = findViewById(R.id.signup_button);
@@ -46,13 +47,14 @@ public class SignupActivity extends AppCompatActivity {
                 if (pass.isEmpty()) {
                     signupPassword.setError("Password cannot be empty");
                 } else {
-                    auth.createUserWithEmailAndPassword(user, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mAuth.createUserWithEmailAndPassword(user, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(SignupActivity.this, "SignUp Successful", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                             } else {
+                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                 Toast.makeText(SignupActivity.this, "SignUp Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }

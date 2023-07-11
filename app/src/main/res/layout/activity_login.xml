@@ -80,7 +80,7 @@
                 android:textColor="@color/green"
                 android:textSize="16sp" />
 
-            <com.developer.gbuttons.GoogleSignInButton
+            <com.google.android.gms.common.SignInButton
                 android:id="@+id/googleBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -89,8 +89,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="40dp"
                 android:padding="8dp"
-                android:text="Sign in with Google"
-                app:isDarkTheme="true" />
+                android:text="Sign in with Google" />
 
             <TextView
                 android:id="@+id/signUpRedirectText"

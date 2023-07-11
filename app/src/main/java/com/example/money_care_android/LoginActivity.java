@@ -10,9 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -20,13 +23,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.developer.gbuttons.GoogleSignInButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -36,12 +40,13 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "EmailPassword";
     private EditText loginEmail, loginPassword;
     private TextView signupRedirectText;
     private Button loginButton;
-    private FirebaseAuth auth;
+    private FirebaseAuth mAuth;
     TextView forgotPassword;
-    GoogleSignInButton googleBtn;
+    SignInButton googleBtn;
     GoogleSignInOptions gOptions;
     GoogleSignInClient gClient;
 
@@ -58,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         forgotPassword = findViewById(R.id.forgot_password);
         googleBtn = findViewById(R.id.googleBtn);
 
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,18 +74,23 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     if (!pass.isEmpty()) {
-                        auth.signInWithEmailAndPassword(email, pass)
-                                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+
+                        mAuth.signInWithEmailAndPassword(email, pass)
+                                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                     @Override
-                                    public void onSuccess(AuthResult authResult) {
-                                        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                        finish();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+
+                                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                            finish();
+
+                                        } else {
+                                            // If sign in fails, display a message to the user.
+                                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                            Toast.makeText(LoginActivity.this, "Login Failed",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 });
                     } else {
@@ -116,14 +126,14 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String userEmail = emailBox.getText().toString();
 
-                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()){
+                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
                             Toast.makeText(LoginActivity.this, "Enter your registered email id", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        auth.sendPasswordResetEmail(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        mAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "Check your email", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
                                 } else {
@@ -139,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-                if (dialog.getWindow() != null){
+                if (dialog.getWindow() != null) {
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
                 }
                 dialog.show();
@@ -150,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
         gClient = GoogleSignIn.getClient(this, gOptions);
 
         GoogleSignInAccount gAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (gAccount != null){
+        if (gAccount != null) {
             finish();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
@@ -159,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK){
+                        if (result.getResultCode() == Activity.RESULT_OK) {
                             Intent data = result.getData();
                             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                             try {
@@ -167,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
-                            } catch (ApiException e){
+                            } catch (ApiException e) {
                                 Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                             }
                         }

@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:text="Sign Up"
                 android:textAlignment="center"
-                android:textColor="@color/lavender"
+                android:textColor="@color/green"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
-                android:backgroundTint="@color/lavender"
+                android:backgroundTint="@color/green"
                 android:text="Sign Up"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />

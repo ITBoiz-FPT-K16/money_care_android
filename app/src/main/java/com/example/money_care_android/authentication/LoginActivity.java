@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                                                             if (task.isSuccessful()) {
                                                                 String idToken = task.getResult().getToken();
-                                                                SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("TOKEN", MODE_PRIVATE).edit();
+                                                                SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE).edit();
                                                                 editor.putString("token", "Bearer " + idToken);
                                                                 editor.commit();
                                                             }

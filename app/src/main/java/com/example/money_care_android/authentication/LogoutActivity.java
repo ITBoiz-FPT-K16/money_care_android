@@ -4,6 +4,7 @@ package com.example.money_care_android.authentication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -33,6 +34,9 @@ public class LogoutActivity extends AppCompatActivity {
         gClient = GoogleSignIn.getClient(this, this.gso);
         mAuth.signOut();
         gClient.signOut();
+        SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE).edit();
+        editor.clear();
+        editor.commit();
         startActivity(new Intent(LogoutActivity.this, LoginActivity.class));
         Toast.makeText(LogoutActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
     }

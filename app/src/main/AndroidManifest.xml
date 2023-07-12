@@ -15,13 +15,25 @@
         android:theme="@style/Theme.Money_care_android"
         tools:targetApi="31">
         <activity
-            android:name=".HomeActivity"
+            android:name=".navigation.AddTransactionActivity"
             android:exported="false" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".authentication.LogoutActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".navigation.ExportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".navigation.ReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".navigation.TransactionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".authentication.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".authentication.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

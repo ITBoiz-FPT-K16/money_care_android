@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.money_care_android.authentication.LoginActivity;
+import com.example.money_care_android.navigation.TransactionActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+
+    private static String token = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +21,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            startActivity(new Intent(MainActivity.this, TransactionActivity.class));
             finish();
         } else {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         }
+    }
+
+    public static String getToken() {
+        return token;
+    }
+
+    public static void setToken(String token) {
+        MainActivity.token = token;
     }
 }

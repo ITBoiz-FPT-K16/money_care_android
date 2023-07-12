@@ -55,7 +55,7 @@ public class ChartSdize {
         };
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
         for (CategoryList categoryList : transactionOverall.getCategoryLists()) {
-            pieEntries.add(new PieEntry(categoryList.getTotalPayment(), categoryList.getCategory().getName()));
+            pieEntries.add(new PieEntry(categoryList.getTotalPayment(), categoryList.getName()));
         }
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
         pieDataSet.setColors(colorClassArray);

@@ -1,19 +1,28 @@
 package com.example.money_care_android.models;
 
-import java.util.ArrayList;
+import java.util.Date;
 
-public class TransactionOverall {
+public class DailyMoney {
 
+    private Date date;
     private long totalExpenses;
     private long totalIncomes;
-    private ArrayList<CategoryList> categoryLists;
-    public TransactionOverall() {
-    }
 
-    public TransactionOverall(long totalExpenses, long totalIncomes, ArrayList<CategoryList> categoryLists) {
+    public DailyMoney(Date date, long totalExpenses, long totalIncomes) {
+        this.date = date;
         this.totalExpenses = totalExpenses;
         this.totalIncomes = totalIncomes;
-        this.categoryLists = categoryLists;
+    }
+
+    public DailyMoney() {
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public long getTotalExpenses() {
@@ -31,13 +40,4 @@ public class TransactionOverall {
     public void setTotalIncomes(long totalIncomes) {
         this.totalIncomes = totalIncomes;
     }
-
-    public ArrayList<CategoryList> getCategoryLists() {
-        return categoryLists;
-    }
-
-    public void setCategoryLists(ArrayList<CategoryList> categoryLists) {
-        this.categoryLists = categoryLists;
-    }
-
 }

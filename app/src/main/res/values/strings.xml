@@ -3,4 +3,5 @@
     <string name="open_nav">Open Navigation Drawer</string>
     <string name="close_nav">Close Navigation Drawer</string>
     <string name="add_transaction">Add</string>
+    <string name="server_side">http://18.139.221.196:80</string>
 </resources>

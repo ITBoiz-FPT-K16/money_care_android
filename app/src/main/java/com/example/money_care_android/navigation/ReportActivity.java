@@ -6,17 +6,28 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.money_care_android.MainActivity;
 import com.example.money_care_android.R;
+import com.example.money_care_android.api.ApiService;
 import com.example.money_care_android.authentication.LoginActivity;
 import com.example.money_care_android.authentication.LogoutActivity;
+import com.example.money_care_android.models.ChartSdize;
+import com.example.money_care_android.models.TransactionDetail;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReportActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -25,6 +36,10 @@ public class ReportActivity extends AppCompatActivity {
     FirebaseUser mUser;
 
     ExtendedFloatingActionButton addTransaction;
+
+    BarChart barChart;
+    PieChart pieChart1;
+    PieChart pieChart2;
 
 
     @Override
@@ -38,6 +53,9 @@ public class ReportActivity extends AppCompatActivity {
         export = findViewById(R.id.export);
         logout = findViewById(R.id.logout);
         hello = findViewById(R.id.hello);
+        barChart = findViewById(R.id.bar_chart);
+        pieChart1 = findViewById(R.id.pie_chart1);
+        pieChart2 = findViewById(R.id.pie_chart2);
         addTransaction = findViewById(R.id.add_transaction);
         // user
         mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -91,6 +109,9 @@ public class ReportActivity extends AppCompatActivity {
                 startActivity(new Intent(ReportActivity.this, AddTransactionActivity.class));
             }
         });
+
+        getChartData();
+        Log.d("TAG", "onCreate: " + MainActivity.getToken());
     }
 
     public static void openDrawer(DrawerLayout drawerLayout) {
@@ -114,5 +135,19 @@ public class ReportActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         closeDrawer(drawerLayout);
+    }
+
+    void getChartData() {
+        ApiService.apiService.getTransactionDetail(MainActivity.getToken(), 2023, 07).enqueue(new Callback<TransactionDetail>() {
+            @Override
+            public void onResponse(Call<TransactionDetail> call, Response<TransactionDetail> response) {
+                TransactionDetail transactionDetail = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<TransactionDetail> call, Throwable t) {
+
+            }
+        });
     }
 }

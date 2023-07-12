@@ -5,25 +5,24 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.money_care_android.MainActivity;
 import com.example.money_care_android.R;
+import com.example.money_care_android.api.ApiService;
 import com.example.money_care_android.authentication.LoginActivity;
 import com.example.money_care_android.authentication.LogoutActivity;
-import com.example.money_care_android.models.Category;
-import com.example.money_care_android.models.CategoryList;
-import com.example.money_care_android.models.ChartSdize;
-import com.example.money_care_android.models.Payment;
-import com.example.money_care_android.models.TransactionOverall;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
-import java.util.Date;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TransactionActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -101,31 +100,7 @@ public class TransactionActivity extends AppCompatActivity {
                 startActivity(new Intent(TransactionActivity.this, AddTransactionActivity.class));
             }
         });
-        TransactionOverall transactionOverall = new TransactionOverall();
-        transactionOverall.setTotalExpenses(3860000);
-        transactionOverall.setTotalIncomes(77200000);
-        ArrayList<CategoryList> categoryLists = new ArrayList<>();
-        CategoryList categoryList1 = new CategoryList();
-        Category category1 = new Category("1", "Food", "image", false);
-        categoryList1.setCategory(category1);
-        ArrayList<Payment> payments = new ArrayList<>();
-        payments.add(new Payment("id1", 20000, "Mua do an", new Date(2023,07,06), category1, false));
-        payments.add(new Payment("id2", 20000, "Mua do an", new Date(2023,07,06), category1, false));
-        categoryList1.setPayments(payments);
-        categoryLists.add(categoryList1);
-        CategoryList categoryList2 = new CategoryList();
-        Category category2 = new Category("2", "Food", "image", false);
-        categoryList2.setCategory(category2);
-        ArrayList<Payment> payments2 = new ArrayList<>();
-        payments2.add(new Payment("id1", 20000, "Mua do an", new Date(2023,07,06), category2, false));
-        payments2.add(new Payment("id2", 20000, "Mua do an", new Date(2023,07,06), category2, false));
-        categoryList2.setPayments(payments2);
-        categoryLists.add(categoryList2);
 
-
-        transactionOverall.setCategoryLists(categoryLists);
-        mcBarChart.setData(ChartSdize.monthDetail(transactionOverall));
-        mcBarChart.invalidate();
     }
 
     public static void openDrawer(DrawerLayout drawerLayout) {

@@ -5,11 +5,13 @@ import java.util.ArrayList;
 public class CategoryList {
 
     private Category category;
-    private ArrayList<Payment> payments;
+    private ArrayList<Expense> expenses;
+    private ArrayList<Income> incomes;
 
-    public CategoryList(Category category, ArrayList<Payment> payments) {
+    public CategoryList(Category category, ArrayList<Expense> expenses, ArrayList<Income> incomes) {
         this.category = category;
-        this.payments = payments;
+        this.expenses = expenses;
+        this.incomes = incomes;
     }
 
     public CategoryList() {
@@ -23,45 +25,42 @@ public class CategoryList {
         this.category = category;
     }
 
-    public ArrayList<Payment> getPayments() {
-        return payments;
+    public ArrayList<Expense> getExpenses() {
+        return expenses;
     }
 
-    public void setPayments(ArrayList<Payment> payments) {
-        this.payments = payments;
+    public void setExpenses(ArrayList<Expense> expenses) {
+        this.expenses = expenses;
     }
 
-    //Add payment to list
-    public void addPayment(Payment payment) {
-        this.payments.add(payment);
+    public ArrayList<Income> getIncomes() {
+        return incomes;
     }
 
-    //Remove payment from list
-
-    public void removePayment(Payment payment) {
-        this.payments.remove(payment);
+    public void setIncomes(ArrayList<Income> incomes) {
+        this.incomes = incomes;
     }
 
-    //Get total amount of payments in list (if type = true, get total income, else get total expense)
-    public long getTotalAmount(boolean type) {
+    public long getTotalPayment() {
+        if (category.isType()) {
+            return getTotalIncome();
+        } else {
+            return getTotalExpense();
+        }
+    }
+
+    private long getTotalExpense() {
         long total = 0;
-        for (Payment payment : payments) {
-            if (payment.isType() == type) {
-                total += payment.getAmount();
-            }
+        for (Expense expense : expenses) {
+            total += expense.getAmount();
         }
         return total;
     }
 
-    //Get total amount of payments in list (plus if type = true, minus if type = false)
-    public long getTotalAmount() {
+    private long getTotalIncome() {
         long total = 0;
-        for (Payment payment : payments) {
-            if (payment.isType()) {
-                total += payment.getAmount();
-            } else {
-                total -= payment.getAmount();
-            }
+        for (Income income : incomes) {
+            total += income.getAmount();
         }
         return total;
     }

@@ -3,6 +3,7 @@ package com.example.money_care_android.authentication;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
@@ -50,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient gClient;
 
     private static final String TAG2 = "GoogleActivity";
-    private static final int RC_SIGN_IN = 9001;
 
+    private static final int RC_SIGN_IN = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,17 @@ public class LoginActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
+                                            mAuth.getCurrentUser().getIdToken(true)
+                                                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                                            if (task.isSuccessful()) {
+                                                                String idToken = task.getResult().getToken();
+                                                                SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("TOKEN", MODE_PRIVATE).edit();
+                                                                editor.putString("token", "Bearer " + idToken);
+                                                                editor.commit();
+                                                            }
+                                                        }
+                                                    });
                                             Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                             finish();
@@ -197,10 +209,21 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            mAuth.getCurrentUser().getIdToken(true)
+                                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                            if (task.isSuccessful()) {
+                                                String idToken = task.getResult().getToken();
+                                                SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE).edit();
+                                                editor.putString("token", "Bearer " + idToken);
+                                                editor.commit();
+                                            }
+                                        }
+                                    });
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                            FirebaseUser mUser = mAuth.getCurrentUser();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

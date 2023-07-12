@@ -17,16 +17,16 @@ import com.google.firebase.auth.GetTokenResult;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private static FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(MainActivity.this, TransactionActivity.class);
             startActivity(intent);
-
             finish();
         } else {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -34,15 +34,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static String getToken() {
-        final String[] result = new String[1];
-        mAuth.getCurrentUser().getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            result[0] = task.getResult().getToken();
-                        }}});
-
-        return "Bearer " + result[0];
-    }
 }

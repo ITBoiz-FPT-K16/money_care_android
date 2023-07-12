@@ -1,29 +1,31 @@
 package com.example.money_care_android.navigation;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.money_care_android.MainActivity;
 import com.example.money_care_android.R;
 import com.example.money_care_android.api.ApiService;
 import com.example.money_care_android.authentication.LoginActivity;
 import com.example.money_care_android.authentication.LogoutActivity;
-import com.example.money_care_android.models.ChartSdize;
 import com.example.money_care_android.models.TransactionDetail;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,6 +61,7 @@ public class ReportActivity extends AppCompatActivity {
         addTransaction = findViewById(R.id.add_transaction);
         // user
         mUser = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d("TAG", "Token: " + getToken());
         if (mUser != null) {
             if (mUser.getDisplayName() != null)
                 hello.setText("Hello, " + mUser.getDisplayName());
@@ -111,7 +114,6 @@ public class ReportActivity extends AppCompatActivity {
         });
 
         getChartData();
-        Log.d("TAG", "onCreate: " + MainActivity.getToken());
     }
 
     public static void openDrawer(DrawerLayout drawerLayout) {
@@ -131,6 +133,11 @@ public class ReportActivity extends AppCompatActivity {
         a1.finish();
     }
 
+    public String getToken() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE);
+        return sharedPreferences.getString("token", "");
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -138,7 +145,7 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     void getChartData() {
-        ApiService.apiService.getTransactionDetail(MainActivity.getToken(), 2023, 07).enqueue(new Callback<TransactionDetail>() {
+        ApiService.apiService.getTransactionDetail(getToken(), 2023, 07).enqueue(new Callback<TransactionDetail>() {
             @Override
             public void onResponse(Call<TransactionDetail> call, Response<TransactionDetail> response) {
                 TransactionDetail transactionDetail = response.body();

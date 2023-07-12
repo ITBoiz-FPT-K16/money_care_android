@@ -22,11 +22,14 @@
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
 
+            <include
+                android:id="@+id/transaction_chart"
+                layout="@layout/pie_chart" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="400dp"
                 android:text="Transaction" />
         </LinearLayout>
 

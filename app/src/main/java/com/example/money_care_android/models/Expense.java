@@ -2,22 +2,23 @@ package com.example.money_care_android.models;
 
 import java.util.Date;
 
-public class Payment {
+public class Expense {
+
     private String id;
     private long amount;
     private String description;
     private Date date;
     private Category category;
 
-    private boolean type;
-
-    public Payment(String id, long amount, String description, Date date, Category category, boolean type) {
+    public Expense(String id, long amount, String description, Date date, Category category) {
         this.id = id;
         this.amount = amount;
         this.description = description;
         this.date = date;
         this.category = category;
-        this.type = type;
+    }
+
+    public Expense() {
     }
 
     public String getId() {
@@ -58,13 +59,5 @@ public class Payment {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public boolean isType() {
-        return type;
-    }
-
-    public void setType(boolean type) {
-        this.type = type;
     }
 }

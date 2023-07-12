@@ -33,7 +33,6 @@ public class LogoutActivity extends AppCompatActivity {
         gClient = GoogleSignIn.getClient(this, this.gso);
         mAuth.signOut();
         gClient.signOut();
-        MainActivity.setToken(null);
         startActivity(new Intent(LogoutActivity.this, LoginActivity.class));
         Toast.makeText(LogoutActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
     }

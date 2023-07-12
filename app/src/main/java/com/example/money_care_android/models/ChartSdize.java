@@ -14,9 +14,15 @@ public class ChartSdize {
 
     public static BarData lastThisMonth(int lastMonth, int thisMonth) {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
+        //two colors for two bar entry, the first one is darker than the second one
+        int[] colorClassArray = new int[]{
+                Color.parseColor("#ff5e5e"),
+                Color.parseColor("#ff9d9d")
+        };
         barEntries.add(new BarEntry(1, lastMonth));
         barEntries.add(new BarEntry(2, thisMonth));
         BarDataSet barDataSet = new BarDataSet(barEntries, "Tổng chi");
+        barDataSet.setColors(colorClassArray);
         BarData barData = new BarData();
         barData.addDataSet(barDataSet);
 
@@ -49,7 +55,7 @@ public class ChartSdize {
         };
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
         for (CategoryList categoryList : transactionOverall.getCategoryLists()) {
-            pieEntries.add(new PieEntry(categoryList.getTotalAmount(false), categoryList.getCategory().getName()));
+            pieEntries.add(new PieEntry(categoryList.getTotalPayment(), categoryList.getCategory().getName()));
         }
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
         pieDataSet.setColors(colorClassArray);
@@ -57,4 +63,6 @@ public class ChartSdize {
         pieData.addDataSet(pieDataSet);
         return pieData;
     }
+
+//    public static BarData monthBarData() {}
 }

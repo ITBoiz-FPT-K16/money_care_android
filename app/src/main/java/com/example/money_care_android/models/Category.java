@@ -1,6 +1,10 @@
 package com.example.money_care_android.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Category {
+
+    @SerializedName("_id")
     private String id;
     private String name;
     private String image;

@@ -1,16 +1,18 @@
 package com.example.money_care_android.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 public class Expense {
-
+    @SerializedName("_id")
     private String id;
     private long amount;
     private String description;
     private Date date;
-    private Category category;
+    private String category;
 
-    public Expense(String id, long amount, String description, Date date, Category category) {
+    public Expense(String id, long amount, String description, Date date, String category) {
         this.id = id;
         this.amount = amount;
         this.description = description;
@@ -53,11 +55,11 @@ public class Expense {
         this.date = date;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 }

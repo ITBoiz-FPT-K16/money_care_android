@@ -1,31 +1,30 @@
 package com.example.money_care_android.navigation;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.money_care_android.MainActivity;
 import com.example.money_care_android.R;
 import com.example.money_care_android.api.ApiService;
 import com.example.money_care_android.authentication.LoginActivity;
 import com.example.money_care_android.authentication.LogoutActivity;
+import com.example.money_care_android.models.ChartSdize;
 import com.example.money_care_android.models.TransactionDetail;
+import com.example.money_care_android.models.TransactionOverall;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,7 +60,6 @@ public class ReportActivity extends AppCompatActivity {
         addTransaction = findViewById(R.id.add_transaction);
         // user
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        Log.d("TAG", "Token: " + getToken());
         if (mUser != null) {
             if (mUser.getDisplayName() != null)
                 hello.setText("Hello, " + mUser.getDisplayName());
@@ -114,6 +112,7 @@ public class ReportActivity extends AppCompatActivity {
         });
 
         getChartData();
+        Log.d("TAG", "onCreate: " + MainActivity.getToken());
     }
 
     public static void openDrawer(DrawerLayout drawerLayout) {
@@ -133,11 +132,6 @@ public class ReportActivity extends AppCompatActivity {
         a1.finish();
     }
 
-    public String getToken() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("data", MODE_PRIVATE);
-        return sharedPreferences.getString("token", "");
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -145,7 +139,7 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     void getChartData() {
-        ApiService.apiService.getTransactionDetail(getToken(), 2023, 07).enqueue(new Callback<TransactionDetail>() {
+        ApiService.apiService.getTransactionDetail("Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImE1MWJiNGJkMWQwYzYxNDc2ZWIxYjcwYzNhNDdjMzE2ZDVmODkzMmIiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQWRtaW4iLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbW9uZXktY2FyZS1maXJlYmFzZSIsImF1ZCI6Im1vbmV5LWNhcmUtZmlyZWJhc2UiLCJhdXRoX3RpbWUiOjE2ODkxNjI5MTksInVzZXJfaWQiOiJ6WmdqOHdTcnRVUTdwbHFFSHcydHE1T3lGeTAyIiwic3ViIjoielpnajh3U3J0VVE3cGxxRUh3MnRxNU95RnkwMiIsImlhdCI6MTY4OTE2MjkxOSwiZXhwIjoxNjg5MTY2NTE5LCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJhZG1pbkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.Dx8eTPIblLt3RcV661IPCM7leJM82gLeuzf4NLKyG8bcoUwt_qK2ICI2ffar6_XFxdssO9AUN-YIonDdQ1Srbx_xxBx_rq1DhUY0tjjgBDwoCJ1XiDkkBvYL9daBxMP41AkC4brERV8qvchbui03XqTCHLRPIkY9psWliEIv6L_W2F7NpFCjuehgwgLesTJIpVc0-Ue-UuPFjMEkoe8aM8j6qrwVU2aiA_TEu1XaAEFiGOkJREqXzvgpsocShmfHwgFyy5gVvvfED3I8W_7S7aq3rMC_Kpqwc_GemFAqB2MGWefG8X_pEIqonf-7joocZAc8AKqWswAP4oRL85-S2A", 2023, 07).enqueue(new Callback<TransactionDetail>() {
             @Override
             public void onResponse(Call<TransactionDetail> call, Response<TransactionDetail> response) {
                 TransactionDetail transactionDetail = response.body();
@@ -153,7 +147,19 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<TransactionDetail> call, Throwable t) {
+                Log.d("TAG", "onFailure: " + t.getMessage());
+            }
+        });
 
+        ApiService.apiService.getTransactionOverall("Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImE1MWJiNGJkMWQwYzYxNDc2ZWIxYjcwYzNhNDdjMzE2ZDVmODkzMmIiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQWRtaW4iLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbW9uZXktY2FyZS1maXJlYmFzZSIsImF1ZCI6Im1vbmV5LWNhcmUtZmlyZWJhc2UiLCJhdXRoX3RpbWUiOjE2ODkxNjI5MTksInVzZXJfaWQiOiJ6WmdqOHdTcnRVUTdwbHFFSHcydHE1T3lGeTAyIiwic3ViIjoielpnajh3U3J0VVE3cGxxRUh3MnRxNU95RnkwMiIsImlhdCI6MTY4OTE2MjkxOSwiZXhwIjoxNjg5MTY2NTE5LCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJhZG1pbkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.Dx8eTPIblLt3RcV661IPCM7leJM82gLeuzf4NLKyG8bcoUwt_qK2ICI2ffar6_XFxdssO9AUN-YIonDdQ1Srbx_xxBx_rq1DhUY0tjjgBDwoCJ1XiDkkBvYL9daBxMP41AkC4brERV8qvchbui03XqTCHLRPIkY9psWliEIv6L_W2F7NpFCjuehgwgLesTJIpVc0-Ue-UuPFjMEkoe8aM8j6qrwVU2aiA_TEu1XaAEFiGOkJREqXzvgpsocShmfHwgFyy5gVvvfED3I8W_7S7aq3rMC_Kpqwc_GemFAqB2MGWefG8X_pEIqonf-7joocZAc8AKqWswAP4oRL85-S2A", 2023, 07).enqueue(new Callback<TransactionOverall>() {
+            @Override
+            public void onResponse(Call<TransactionOverall> call, Response<TransactionOverall> response) {
+                TransactionOverall transactionOverall = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<TransactionOverall> call, Throwable t) {
+                Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

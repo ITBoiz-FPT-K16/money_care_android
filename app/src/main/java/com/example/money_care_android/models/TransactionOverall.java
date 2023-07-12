@@ -1,11 +1,15 @@
 package com.example.money_care_android.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 public class TransactionOverall {
 
     private long totalExpenses;
     private long totalIncomes;
+
+    @SerializedName("categories")
     private ArrayList<CategoryList> categoryLists;
     public TransactionOverall() {
     }

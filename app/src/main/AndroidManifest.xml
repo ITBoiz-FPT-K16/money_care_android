@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Money_care_android"
         tools:targetApi="31">
         <activity
+            android:name=".navigation.addTransaction.CategoryAdapter"
+            android:exported="false" />
+        <activity
             android:name=".navigation.AddTransactionActivity"
             android:exported="false" />
         <activity

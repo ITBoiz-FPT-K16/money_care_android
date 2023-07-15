@@ -35,7 +35,9 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
+
+import java.time.LocalDate;
+import java.time.Month;
 
 import retrofit2.Call;
 import retrofit2.Callback;

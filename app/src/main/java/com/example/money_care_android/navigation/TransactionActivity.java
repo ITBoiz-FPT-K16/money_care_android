@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.money_care_android.MainActivity;
 import com.example.money_care_android.R;
 import com.example.money_care_android.api.ApiService;
 import com.example.money_care_android.authentication.LoginActivity;
@@ -19,7 +18,8 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
+import java.util.Date;
+import java.time.Month;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +34,8 @@ public class TransactionActivity extends AppCompatActivity {
 
     PieChart mcBarChart;
 
+    int month, year;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,12 @@ public class TransactionActivity extends AppCompatActivity {
         export = findViewById(R.id.export);
         logout = findViewById(R.id.logout);
         hello = findViewById(R.id.hello);
+        month = (new Date()).getMonth()+1;
+        year = (new Date()).getYear()+1900;
+        if (getIntent()!=null){
+            month = getIntent().getIntExtra("month", month);
+            year = getIntent().getIntExtra("year", year);
+        }
         addTransaction = findViewById(R.id.add_transaction);
         // user
         mUser = FirebaseAuth.getInstance().getCurrentUser();

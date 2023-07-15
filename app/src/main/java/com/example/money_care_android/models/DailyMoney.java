@@ -1,5 +1,8 @@
 package com.example.money_care_android.models;
 
+import android.annotation.SuppressLint;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DailyMoney {
@@ -39,5 +42,11 @@ public class DailyMoney {
 
     public void setTotalIncomes(long totalIncomes) {
         this.totalIncomes = totalIncomes;
+    }
+
+    public int getDateString() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd");
+        return Integer.parseInt(formatter.format(date));
+
     }
 }

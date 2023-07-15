@@ -37,7 +37,7 @@
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pie_chart1"
                     android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_height="200dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="25dp"
                     app:layout_constraintStart_toEndOf="@+id/pie_chart2"
@@ -48,7 +48,7 @@
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pie_chart2"
                     android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_height="200dp"
                     android:layout_marginEnd="25dp"
                     android:layout_marginVertical="25dp"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -18,12 +18,13 @@ public interface ApiService {
     Gson gson = new GsonBuilder()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
-
     ApiService apiService = new Retrofit.Builder()
             .baseUrl("http://18.139.221.196:80/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ApiService.class);
+
+
 
     @GET("transactions/{year}/{month}/overall")
     Call<TransactionOverall> getTransactionOverall(
@@ -37,11 +38,5 @@ public interface ApiService {
             @Header("Authorization") String accessToken
     );
 
-    @GET("transactions/{year}/{month}/detail")
-    Call<TransactionDetail> getTransactionDetail(
-            @Header("Authorization") String accessToken,
-            @Path("year") int year,
-            @Path("month") int month
-    );
 
 }

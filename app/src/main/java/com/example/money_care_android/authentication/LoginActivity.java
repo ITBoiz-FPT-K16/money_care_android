@@ -209,7 +209,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            mAuth.getCurrentUser().getIdToken(true)
+                            mAuth.getCurrentUser().getIdToken(false)
                                     .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                                             if (task.isSuccessful()) {

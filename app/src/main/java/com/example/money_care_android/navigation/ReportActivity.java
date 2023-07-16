@@ -162,7 +162,8 @@ public class ReportActivity extends AppCompatActivity {
             public void onResponse(Call<TransactionDetail> call, Response<TransactionDetail> response) {
                 if (response.raw().code() == 403 || response.raw().code() == 401) {
                     Toast.makeText(ReportActivity.this, "Please login again", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ReportActivity.this, LoginActivity.class));
+                    Intent intent = new Intent(ReportActivity.this, LoginActivity.class);
+                    startActivity(intent);
                     return;
                 }
 
@@ -182,15 +183,16 @@ public class ReportActivity extends AppCompatActivity {
             public void onResponse(Call<TransactionOverall> call, Response<TransactionOverall> response) {
                 if (response.raw().code() == 403 || response.raw().code() == 401) {
                     Toast.makeText(ReportActivity.this, "Please login again", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ReportActivity.this, LoginActivity.class));
+                    Intent intent = new Intent(ReportActivity.this, LoginActivity.class);
+                    startActivity(intent);
                     return;
                 }
 
                 TransactionOverall transactionOverall = response.body();
 
                 if (transactionOverall == null) return;
-                pieChart1.setData(ChartSdize.monthDetail(transactionOverall, false, pieChart1));
-                pieChart2.setData(ChartSdize.monthDetail(transactionOverall, true, pieChart2));
+                pieChart1.setData(ChartSdize.monthDetail(transactionOverall, false, pieChart1, getApplicationContext(), 2023, 07));
+                pieChart2.setData(ChartSdize.monthDetail(transactionOverall, true, pieChart2, getApplicationContext(), 2023, 07));
 
             }
 

@@ -1,12 +1,24 @@
 package com.example.money_care_android.listener;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.MotionEvent;
 
+import com.example.money_care_android.navigation.ReportActivity;
+import com.example.money_care_android.navigation.details.PieDetailActivity;
+import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 
 public class OnPieChartTappingListener implements OnChartGestureListener {
 
+    PieData pieData;
+    Context context;
+
+    public OnPieChartTappingListener(PieData pieData, Context context) {
+        this.pieData = pieData;
+        this.context = context;
+    }
 
     /**
      * Callbacks when a touch-gesture has started on the chart (ACTION_DOWN)
@@ -57,7 +69,7 @@ public class OnPieChartTappingListener implements OnChartGestureListener {
      */
     @Override
     public void onChartSingleTapped(MotionEvent me) {
-
+        Intent intent = new Intent(context, PieDetailActivity.class);
     }
 
     /**

@@ -9,14 +9,14 @@ public class TransactionDetail {
 
     private ArrayList<DailyMoney> dateInMonth;
 
-    private ArrayList<Expense> expenseList;
+    private ArrayList<CategorySum> expenseList;
 
-    private ArrayList<Income> incomeList;
+    private ArrayList<CategorySum> incomeList;
 
     public TransactionDetail() {
     }
 
-    public TransactionDetail(long totalExpenses, long totalIncomes, ArrayList<DailyMoney> dateInMonth, ArrayList<Expense> expenseList, ArrayList<Income> incomeList) {
+    public TransactionDetail(long totalExpenses, long totalIncomes, ArrayList<DailyMoney> dateInMonth, ArrayList<CategorySum> expenseList, ArrayList<CategorySum> incomeList) {
         this.totalExpenses = totalExpenses;
         this.totalIncomes = totalIncomes;
         this.dateInMonth = dateInMonth;
@@ -48,19 +48,19 @@ public class TransactionDetail {
         this.dateInMonth = dateInMonth;
     }
 
-    public ArrayList<Expense> getExpenseList() {
+    public ArrayList<CategorySum> getExpenseList() {
         return expenseList;
     }
 
-    public void setExpenseList(ArrayList<Expense> expenseList) {
+    public void setExpenseList(ArrayList<CategorySum> expenseList) {
         this.expenseList = expenseList;
     }
 
-    public ArrayList<Income> getIncomeList() {
+    public ArrayList<CategorySum> getIncomeList() {
         return incomeList;
     }
 
-    public void setIncomeList(ArrayList<Income> incomeList) {
+    public void setIncomeList(ArrayList<CategorySum> incomeList) {
         this.incomeList = incomeList;
     }
 }

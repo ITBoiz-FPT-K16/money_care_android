@@ -89,4 +89,75 @@ public class Category {
     public void setType(boolean type) {
         this.type = type;
     }
+
+    public static int getIcon(String id) {
+        switch (id) {
+            case "649a962cbea2ffe7898224ba":
+                return R.drawable.ic_1;
+            case "649a962cbea2ffe7898224b6":
+                return R.drawable.ic_2;
+            case "649a962cbea2ffe7898224b4":
+                return R.drawable.ic_3;
+            case "649a962cbea2ffe7898224b8":
+                return R.drawable.ic_4;
+            case "649a962cbea2ffe7898224bd":
+                return R.drawable.ic_5;
+            case "649a962cbea2ffe7898224c6":
+                return R.drawable.ic_6;
+            case "649a962cbea2ffe7898224b2":
+                return R.drawable.ic_7;
+            case "649a962cbea2ffe7898224c8":
+                return R.drawable.ic_8;
+            case "649a962cbea2ffe7898224c9":
+                return R.drawable.ic_9;
+            case "649a962cbea2ffe7898224cc":
+                return R.drawable.ic_10;
+            case "649a962cbea2ffe7898224ca":
+                return R.drawable.ic_11;
+            case "649a962cbea2ffe7898224b9":
+                return R.drawable.ic_12;
+            case "649a962cbea2ffe7898224cd":
+                return R.drawable.ic_13;
+            case "649a962cbea2ffe7898224b0":
+                return R.drawable.ic_14;
+            case "649a962cbea2ffe7898224b1":
+                return R.drawable.ic_15;
+            case "649a962cbea2ffe7898224c1":
+                return R.drawable.ic_16;
+            case "649a962cbea2ffe7898224c3":
+                return R.drawable.ic_17;
+            case "649a962cbea2ffe7898224c0":
+                return R.drawable.ic_18;
+            case "649a962cbea2ffe7898224b3":
+                return R.drawable.ic_19;
+            case "649a962cbea2ffe7898224b5":
+                return R.drawable.ic_20;
+            case "649a962cbea2ffe7898224bb":
+                return R.drawable.ic_21;
+            case "649a962cbea2ffe7898224be":
+                return R.drawable.ic_22;
+            case "649a962cbea2ffe7898224ce":
+                return R.drawable.ic_23;
+            case "649a962cbea2ffe7898224c2":
+                return R.drawable.ic_24;
+            case "649a962cbea2ffe7898224b7":
+                return R.drawable.ic_25;
+            case "649a962cbea2ffe7898224c7":
+                return R.drawable.ic_26;
+            case "649a962cbea2ffe7898224bc":
+                return R.drawable.ic_27;
+            case "649a962cbea2ffe7898224bf":
+                return R.drawable.ic_28;
+            case "649a962cbea2ffe7898224c5":
+                return R.drawable.ic_29;
+            case "649a962cbea2ffe7898224cb":
+                return R.drawable.ic_30;
+            case "649a962cbea2ffe7898224c4":
+                return R.drawable.ic_31;
+            default:
+                return R.drawable.ic_1;
+
+        }
+
+    }
 }

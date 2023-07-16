@@ -2,6 +2,7 @@ package com.example.money_care_android.navigation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.money_care_android.R;
@@ -25,26 +27,33 @@ import com.example.money_care_android.navigation.addTransaction.CustomSpinner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddTransactionActivity extends AppCompatActivity implements CustomSpinner.OnSpinnerEventsListener {
+public class AddTransactionActivity extends AppCompatActivity implements CustomSpinner.OnSpinnerEventsListener, DatePickerDialog.OnDateSetListener {
 
     private ImageView backButton;
     private Button addButton;
-    private EditText amountText, descriptionText, dateText;
-    private int amount;
+    private EditText amountText, descriptionText;
 
+    private Button dateText;
+    private long amount;
     boolean type;
     private String description, date;
     private String category;
     private CustomSpinner categorySpinner;
 
+    private DatePickerDialog datePickerDialog;
+    private Date d;
+    private Calendar calendar;
 
     private CategoryAdapter categoryAdapter;
+
+    private int Year, Month, Day;
 
 
     @Override
@@ -60,6 +69,11 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
         categorySpinner = findViewById(R.id.category);
         categorySpinner.setSpinnerEventsListener(this);
         categorySpinner.setAdapter(categoryAdapter);
+        calendar = Calendar.getInstance();
+        Year = calendar.get(Calendar.YEAR) ;
+        Month = calendar.get(Calendar.MONTH);
+        Day = calendar.get(Calendar.DAY_OF_MONTH);
+        d = calendar.getTime();
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,60 +82,75 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
             }
         });
 
+        dateText.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                datePickerDialog = DatePickerDialog.newInstance(AddTransactionActivity.this, Year, Month, Day);
+                datePickerDialog.setThemeDark(false);
+                datePickerDialog.showYearPickerFirst(false);
+                datePickerDialog.setTitle("Date Picker");
+
+
+                datePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+
+                        Toast.makeText(AddTransactionActivity.this, "Datepicker Canceled", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                datePickerDialog.show(getSupportFragmentManager(), "DatePickerDialog");
+            }
+        });
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 amount = Integer.parseInt(amountText.getText().toString());
                 description = descriptionText.getText().toString();
-                date = dateText.getText().toString();
+
                 category = ((Category) categorySpinner.getSelectedItem()).getId();
                 type = ((Category) categorySpinner.getSelectedItem()).isType();
-                Log.d("AddTransactionActivity", "onClick: " + amount + " " + description + " " + date + " " + category + " " + type);
-                Object transaction = new Object();
-
-                SimpleDateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-
-                Date d = new Date();
-                try {
-                    d = formatDate.parse(date);
-                } catch (ParseException e) {
-                    Toast.makeText(AddTransactionActivity.this, "Invalid Date", Toast.LENGTH_SHORT).show();
-                }
-                if (type) {
-                    //add income
-                    transaction = new Income("", amount, description, d, category);
-                } else {
-                    //add expense
-                    transaction = new Expense("", amount, description, d, category);
-                }
-
-
                 if (type==false){
-                    ApiService.apiService.addExpense(getToken(), (Expense) transaction).enqueue(new Callback<Expense>() {
+                    Expense transaction = new Expense("",amount, description, d, category);
+                    ApiService.apiService.addExpense(getToken(), transaction).enqueue(new Callback<Expense>() {
                         @Override
                         public void onResponse(Call<Expense> call, Response<Expense> response) {
+
+                            if (response.raw().code() == 403 || response.raw().code()==401) {
+                                Toast.makeText(AddTransactionActivity.this, "Session Expired", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(AddTransactionActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                return;
+                            }
                             if (response.raw().code() == 200) {
                                 Toast.makeText(AddTransactionActivity.this, "Add Expense Success", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AddTransactionActivity.this, TransactionActivity.class);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(AddTransactionActivity.this, "Add Expense Failed", Toast.LENGTH_SHORT).show();
-                            }
-                            if (response.raw().code() == 403 || response.raw().code()==401) {
-                                Toast.makeText(AddTransactionActivity.this, "Session Expired", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(AddTransactionActivity.this, LoginActivity.class);
-                                startActivity(intent);
+                                Log.d("AddTransactionActivity", "onResponse: " + response.toString());
                             }
                         }
                         @Override
                         public void onFailure(Call<Expense> call, Throwable t) {
                             Toast.makeText(AddTransactionActivity.this, "Add Expense Failed", Toast.LENGTH_SHORT).show();
+                            Log.d("AddTransactionActivity", "onFailure: " + t.getMessage());
                         }
                     });
                 } else {
+
+                    Income transaction = new Income("",amount, description, d, category);
                     ApiService.apiService.addIncome(getToken(), (Income) transaction).enqueue(new Callback<Income>() {
                         @Override
                         public void onResponse(Call<Income> call, Response<Income> response) {
+
+                            if (response.raw().code() == 403 || response.raw().code()==401) {
+                                Toast.makeText(AddTransactionActivity.this, "Session Expired", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(AddTransactionActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                return;
+                            }
                             if (response.raw().code() == 200) {
                                 Toast.makeText(AddTransactionActivity.this, "Add Income Success", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AddTransactionActivity.this, TransactionActivity.class);
@@ -129,15 +158,11 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
                             } else {
                                 Toast.makeText(AddTransactionActivity.this, "Add Income Failed", Toast.LENGTH_SHORT).show();
                             }
-                            if (response.raw().code() == 403 || response.raw().code()==401) {
-                                Toast.makeText(AddTransactionActivity.this, "Session Expired", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(AddTransactionActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                            }
                         }
                         @Override
                         public void onFailure(Call<Income> call, Throwable t) {
                             Toast.makeText(AddTransactionActivity.this, "Add Income Failed", Toast.LENGTH_SHORT).show();
+                            Log.d("AddTransactionActivity", "onFailure: " + t.getMessage());
                         }
                     });
                 }
@@ -160,5 +185,11 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
         categorySpinner.setBackground(getResources().getDrawable(R.drawable.bg_category_up));
     }
 
-
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        calendar.set(year, monthOfYear, dayOfMonth);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+        d = calendar.getTime();
+        dateText.setText(sdf.format(calendar.getTime()));
+    }
 }

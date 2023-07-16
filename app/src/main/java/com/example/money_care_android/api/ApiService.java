@@ -20,7 +20,7 @@ import retrofit2.http.Path;
 public interface ApiService {
 
     Gson gson = new GsonBuilder()
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
 
     ApiService apiService = new Retrofit.Builder()
             .baseUrl("http://18.139.221.196:80/")

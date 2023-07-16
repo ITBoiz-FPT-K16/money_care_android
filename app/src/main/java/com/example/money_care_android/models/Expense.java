@@ -62,4 +62,12 @@ public class Expense {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public String getDay() {
+        return (String) android.text.format.DateFormat.format("dd", date);
+    }
+
+    public String dateToString() {
+        return (String) android.text.format.DateFormat.format("EEE MMM yyyy", date);
+    }
 }

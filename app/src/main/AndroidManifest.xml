@@ -19,6 +19,9 @@
             android:name=".navigation.addTransaction.CategoryAdapter"
             android:exported="false" />
         <activity
+            android:name=".navigation.details.PieDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".navigation.AddTransactionActivity"
             android:exported="false" />
         <activity

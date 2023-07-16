@@ -1,4 +1,6 @@
 package com.example.money_care_android.models;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -6,6 +8,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 
+import com.example.money_care_android.formatter.MyValueFormatter;
+import com.example.money_care_android.listener.OnPieChartTappingListener;
+import com.example.money_care_android.navigation.details.PieDetailActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -50,7 +55,7 @@ public class ChartSdize {
 
     //Generate PieData base on Category
     //transactionOverall.getCategoryLists() is a list of CategoryList contains Category and list of Payment
-    public static PieData monthDetail(TransactionOverall transactionOverall, boolean type, PieChart pieChart) {
+    public static PieData monthDetail(TransactionOverall transactionOverall, boolean type, PieChart pieChart, Context context, int year, int month) {
         int[] colorClassArray = new int[]{
                 Color.parseColor("#f44336"),
                 Color.parseColor("#e91e63"),
@@ -99,7 +104,22 @@ public class ChartSdize {
 
         //Click event
         pieChart.setTouchEnabled(true);
-        pieChart.setOnChartGestureListener(new OnChartGestureListener() {
+
+        Legend l = pieChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setWordWrapEnabled(true);
+        l.setDrawInside(false);
+        l.setTextSize(5f);
+        if (context == null) {
+            l.setEnabled(false);
+            pieChart.setExtraOffsets(15.f, 15.f, 15.f, 15.f);
+        }
+
+
+        if (context != null)
+            pieChart.setOnChartGestureListener(new OnChartGestureListener() {
             @Override
             public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
 
@@ -122,6 +142,12 @@ public class ChartSdize {
 
             @Override
             public void onChartSingleTapped(MotionEvent me) {
+                //Change to PieDetailActivity when click on pie chart)
+                Intent intent = new Intent(context, PieDetailActivity.class);
+                intent.putExtra("year", year);
+                intent.putExtra("month", month);
+                intent.putExtra("type", type);
+                context.startActivity(intent);
 
             }
 
@@ -140,17 +166,6 @@ public class ChartSdize {
 
             }
         });
-
-        Legend l = pieChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setWordWrapEnabled(true);
-        l.setDrawInside(false);
-        l.setTextSize(5f);
-
-
-
         pieChart.invalidate();
         return pieData;
     }

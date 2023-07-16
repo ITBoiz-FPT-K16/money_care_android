@@ -157,6 +157,7 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     void getChartData() {
+        //hardcode
         ApiService2.apiService.getTransactionDetail(getToken(), 2023, 7).enqueue(new Callback<TransactionDetail>() {
             @Override
             public void onResponse(Call<TransactionDetail> call, Response<TransactionDetail> response) {

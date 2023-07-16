@@ -3,6 +3,7 @@ package com.example.money_care_android.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryList {
 
@@ -96,5 +97,13 @@ public class CategoryList {
             total += income.getAmount();
         }
         return total;
+    }
+
+    public int getSize() {
+        if (type) {
+            return incomes.size();
+        } else {
+            return expenses.size();
+        }
     }
 }

@@ -22,15 +22,112 @@
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
 
-            <include
-                android:id="@+id/transaction_chart"
-                layout="@layout/pie_chart" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Transaction" />
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:id="@+id/inflow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3"
+                        android:text="Inflow"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/inflowAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textAlignment="textEnd"
+                        android:layout_weight="7"
+                        android:text="0000000"
+                        android:textSize="16sp"
+                        android:textColor="@color/incomes"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:id="@+id/outflow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3"
+                        android:text="Outflow"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/outflowAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textAlignment="textEnd"
+                        android:layout_weight="7"
+                        android:text="0000000"
+                        android:textSize="16sp"
+                        android:textColor="@color/expenses"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:id="@+id/totalAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textAlignment="textEnd"
+                        android:layout_weight="10"
+                        android:text="0000000"
+                        android:textSize="20sp"
+                        android:textColor="@color/total"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:text="VIEW REPORT FOR THIS PERIOD"
+                    android:textSize="16sp"
+                    android:textColor="@color/green"/>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/transaction_recycler_view"/>
+
+
         </LinearLayout>
 
         <RelativeLayout

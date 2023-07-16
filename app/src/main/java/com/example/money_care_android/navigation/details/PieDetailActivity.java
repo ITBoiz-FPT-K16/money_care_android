@@ -53,7 +53,7 @@ public class PieDetailActivity extends AppCompatActivity {
     }
 
     void getChartData() {
-        int year = getIntent().getIntExtra("year", 2023);
+        int year = getIntent().getIntExtra("year", 2023); //hardcode
         int month = getIntent().getIntExtra("month", 07);
         boolean type = getIntent().getBooleanExtra("type", true);
         ApiService.apiService.getTransactionOverall(getToken(), year, month).enqueue(new Callback<TransactionOverall>() {

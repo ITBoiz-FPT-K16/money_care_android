@@ -131,7 +131,7 @@ public class ReportActivity extends AppCompatActivity {
         btnMonth.setText(month + "/" + year);
 
         rackMonthPicker = new RackMonthPicker(ReportActivity.this)
-                .setMonthType(MonthType.NUMBER)
+                .setMonthType(MonthType.TEXT)
                 .setPositiveButton(new DateMonthDialogListener() {
                     @Override
                     public void onDateMonth(int month, int startDate, int endDate, int year, String monthLabel) {

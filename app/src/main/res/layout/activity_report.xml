@@ -2,11 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".navigation.ReportActivity">
 
-    <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/drawer_layout"
@@ -22,12 +21,41 @@
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="400dp"
-                android:text="Report" />
+<!--            Month Select box-->
+
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:layout_height="300dp"
+                android:layout_width="match_parent"
+                android:id="@+id/bar_chart" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/report_pie_chart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pie_chart1"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="25dp"
+                    app:layout_constraintStart_toEndOf="@+id/pie_chart2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pie_chart2"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginVertical="25dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <RelativeLayout

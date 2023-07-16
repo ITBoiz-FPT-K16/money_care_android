@@ -92,6 +92,8 @@ public class Category {
 
     public static int getIcon(String id) {
         switch (id) {
+            case "649a962cbea2ffe7898224af":
+                return R.drawable.ic_0;
             case "649a962cbea2ffe7898224ba":
                 return R.drawable.ic_1;
             case "649a962cbea2ffe7898224b6":

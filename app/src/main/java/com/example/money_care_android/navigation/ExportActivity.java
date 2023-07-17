@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.example.money_care_android.R;
 import com.example.money_care_android.authentication.LoginActivity;
 import com.example.money_care_android.authentication.LogoutActivity;
+import com.example.money_care_android.navigation.addTransaction.AddTransactionActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

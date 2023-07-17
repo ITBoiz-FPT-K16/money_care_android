@@ -8,13 +8,16 @@ import com.example.money_care_android.models.TransactionOverall;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -42,17 +45,63 @@ public interface ApiService {
             @Header("Authorization") String accessToken
     );
 
+    @GET("export")
+    Call<ResponseBody> exportAll(
+            @Header("Authorization") String accessToken
+    );
+
+    @GET("export/{year}")
+    Call<ResponseBody> exportYear(
+            @Header("Authorization") String accessToken,
+            @Path("year") int year
+    );
+
+    @GET("export/{year}/{month}")
+    Call<ResponseBody> exportMonth(
+            @Header("Authorization") String accessToken,
+            @Path("year") int year,
+            @Path("month") int month
+    );
+
     @POST("incomes")
-    Call<Income> addIncome(
+    Call<Object> addIncome(
             @Header("Authorization") String accessToken,
             @Body Income income
     );
 
     @POST("expenses")
-    Call<Expense> addExpense(
+    Call<Object> addExpense(
             @Header("Authorization") String accessToken,
             @Body Expense expense
             );
+
+
+    @PUT("incomes/{id}")
+    Call<Object> editIncome(
+            @Header("Authorization") String accessToken,
+            @Path("id") String id,
+            @Body Income income
+    );
+
+    @PUT("expenses/{id}")
+    Call<Object> editExpense(
+            @Header("Authorization") String accessToken,
+            @Path("id") String id,
+            @Body Expense expense
+    );
+
+
+    @DELETE("incomes/{id}")
+    Call<Object> deleteIncome(
+            @Header("Authorization") String accessToken,
+            @Path("id") String id
+    );
+
+    @DELETE("expenses/{id}")
+    Call<Object> deleteExpense(
+            @Header("Authorization") String accessToken,
+            @Path("id") String id
+    );
 
 
 }

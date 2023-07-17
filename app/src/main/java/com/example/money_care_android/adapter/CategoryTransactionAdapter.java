@@ -1,6 +1,7 @@
 package com.example.money_care_android.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.example.money_care_android.models.Category;
 import com.example.money_care_android.models.CategoryList;
 import com.example.money_care_android.models.Expense;
 import com.example.money_care_android.models.Income;
+import com.example.money_care_android.navigation.addTransaction.EditTransactionActivity;
 
 import java.util.ArrayList;
 
@@ -51,9 +53,11 @@ public class CategoryTransactionAdapter extends RecyclerView.Adapter<CategoryTra
         if(modal.isType()) {
             transactionAmount = modal.getIncomes().size() + " Transactions";
             incomes = modal.getIncomes();
+            holder.itemView.setBackgroundResource(R.color.brightGreen);
         } else {
             transactionAmount = modal.getExpenses().size() + " Transactions";
             expenses = modal.getExpenses();
+            holder.itemView.setBackgroundResource(R.color.brightRed);
         }
         holder.transactionAmount.setText(transactionAmount);
 
@@ -61,11 +65,8 @@ public class CategoryTransactionAdapter extends RecyclerView.Adapter<CategoryTra
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.recyclerView.setAdapter(adapter);
 
-
-
     }
-
-    @Override
+        @Override
     public int getItemCount() {
         return (categoryLists == null) ? 0 : categoryLists.size();
     }
@@ -82,8 +83,6 @@ public class CategoryTransactionAdapter extends RecyclerView.Adapter<CategoryTra
             transactionAmount = itemView.findViewById(R.id.idTVTransactionAmount);
             categoryIcon = itemView.findViewById(R.id.idIVCategoryImage);
             recyclerView = itemView.findViewById(R.id.idRVTransaction);
-
         }
     }
-
 }

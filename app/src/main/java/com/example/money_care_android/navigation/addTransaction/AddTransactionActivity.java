@@ -1,4 +1,4 @@
-package com.example.money_care_android.navigation;
+package com.example.money_care_android.navigation.addTransaction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.money_care_android.R;
@@ -21,11 +20,9 @@ import com.example.money_care_android.authentication.LoginActivity;
 import com.example.money_care_android.models.Category;
 import com.example.money_care_android.models.Expense;
 import com.example.money_care_android.models.Income;
+import com.example.money_care_android.navigation.TransactionActivity;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.example.money_care_android.navigation.addTransaction.CategoryAdapter;
-import com.example.money_care_android.navigation.addTransaction.CustomSpinner;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,7 +40,7 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
     private Button dateText;
     private long amount;
     boolean type;
-    private String description, date;
+    private String description;
     private String category;
     private CustomSpinner categorySpinner;
 
@@ -70,7 +67,7 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
         categorySpinner.setSpinnerEventsListener(this);
         categorySpinner.setAdapter(categoryAdapter);
         calendar = Calendar.getInstance();
-        Year = calendar.get(Calendar.YEAR) ;
+        Year = calendar.get(Calendar.YEAR);
         Month = calendar.get(Calendar.MONTH);
         Day = calendar.get(Calendar.DAY_OF_MONTH);
         d = calendar.getTime();
@@ -106,16 +103,20 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                amount = Integer.parseInt(amountText.getText().toString());
+                try {
+                    amount = Integer.parseInt(amountText.getText().toString());
+                } catch (NumberFormatException e) {
+                    Toast.makeText(AddTransactionActivity.this, "Amount must be a number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 description = descriptionText.getText().toString();
-
                 category = ((Category) categorySpinner.getSelectedItem()).getId();
                 type = ((Category) categorySpinner.getSelectedItem()).isType();
                 if (type==false){
                     Expense transaction = new Expense("",amount, description, d, category);
-                    ApiService.apiService.addExpense(getToken(), transaction).enqueue(new Callback<Expense>() {
+                    ApiService.apiService.addExpense(getToken(), transaction).enqueue(new Callback<Object>() {
                         @Override
-                        public void onResponse(Call<Expense> call, Response<Expense> response) {
+                        public void onResponse(Call<Object> call, Response<Object> response) {
 
                             if (response.raw().code() == 403 || response.raw().code()==401) {
                                 Toast.makeText(AddTransactionActivity.this, "Session Expired", Toast.LENGTH_SHORT).show();
@@ -133,7 +134,7 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
                             }
                         }
                         @Override
-                        public void onFailure(Call<Expense> call, Throwable t) {
+                        public void onFailure(Call<Object> call, Throwable t) {
                             Toast.makeText(AddTransactionActivity.this, "Add Expense Failed", Toast.LENGTH_SHORT).show();
                             Log.d("AddTransactionActivity", "onFailure: " + t.getMessage());
                         }
@@ -141,9 +142,9 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
                 } else {
 
                     Income transaction = new Income("",amount, description, d, category);
-                    ApiService.apiService.addIncome(getToken(), (Income) transaction).enqueue(new Callback<Income>() {
+                    ApiService.apiService.addIncome(getToken(), (Income) transaction).enqueue(new Callback<Object>() {
                         @Override
-                        public void onResponse(Call<Income> call, Response<Income> response) {
+                        public void onResponse(Call<Object> call, Response<Object> response) {
 
                             if (response.raw().code() == 403 || response.raw().code()==401) {
                                 Toast.makeText(AddTransactionActivity.this, "Session Expired", Toast.LENGTH_SHORT).show();
@@ -160,9 +161,14 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
                             }
                         }
                         @Override
-                        public void onFailure(Call<Income> call, Throwable t) {
-                            Toast.makeText(AddTransactionActivity.this, "Add Income Failed", Toast.LENGTH_SHORT).show();
+                        public void onFailure(Call<Object> call, Throwable t) {
                             Log.d("AddTransactionActivity", "onFailure: " + t.getMessage());
+                            if (t.getMessage().equals("timeout")){
+                                Toast.makeText(AddTransactionActivity.this, "Connection Timeout, please", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(AddTransactionActivity.this, "Add Income Failed", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }

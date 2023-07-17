@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.money_care_android.MainActivity;
@@ -35,6 +37,7 @@ public class PieDetailActivity extends AppCompatActivity {
     private ArrayList<CategorySum> categorySums;
     private PieDetailAdapter pieDetailAdapter;
     private RecyclerView recyclerView;
+    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,15 @@ public class PieDetailActivity extends AppCompatActivity {
         pieChart = findViewById(R.id.pie_chart_detail);
         categorySums = new ArrayList<>();
         recyclerView = findViewById(R.id.idRVCategory);
+        backButton = findViewById(R.id.back_button2);
+
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         getChartData();
     }

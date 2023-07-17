@@ -19,17 +19,12 @@ import android.widget.Toast;
 
 import com.example.money_care_android.R;
 import com.example.money_care_android.adapter.CategoryTransactionAdapter;
-import com.example.money_care_android.adapter.PieDetailAdapter;
 import com.example.money_care_android.api.ApiService;
-import com.example.money_care_android.api.ApiService2;
 import com.example.money_care_android.authentication.LoginActivity;
 import com.example.money_care_android.authentication.LogoutActivity;
 import com.example.money_care_android.models.CategoryList;
-import com.example.money_care_android.models.ChartSdize;
-import com.example.money_care_android.models.TransactionDetail;
 import com.example.money_care_android.models.TransactionOverall;
-import com.example.money_care_android.navigation.details.PieDetailActivity;
-import com.github.mikephil.charting.charts.PieChart;
+import com.example.money_care_android.navigation.addTransaction.AddTransactionActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,8 +35,7 @@ import com.kal.rackmonthpicker.listener.OnCancelMonthDialogListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.time.Month;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,9 +56,6 @@ public class TransactionActivity extends AppCompatActivity {
     Calendar calendar;
     private RackMonthPicker rackMonthPicker;
     Button btnMonth;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

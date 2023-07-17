@@ -23,6 +23,7 @@ import com.example.money_care_android.authentication.LogoutActivity;
 import com.example.money_care_android.models.ChartSdize;
 import com.example.money_care_android.models.TransactionDetail;
 import com.example.money_care_android.models.TransactionOverall;
+import com.example.money_care_android.navigation.addTransaction.AddTransactionActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -149,12 +150,12 @@ public class ReportActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-        btnMonth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rackMonthPicker.show();
-            }
-        });
+            btnMonth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rackMonthPicker.show();
+                }
+            });
 
         getChartData();
         Log.d("TAG", "onCreate: " + getToken());
@@ -212,6 +213,7 @@ public class ReportActivity extends AppCompatActivity {
         });
 
         ApiService.apiService.getTransactionOverall(getToken(), year, month).enqueue(new Callback<TransactionOverall>() {
+
             @Override
             public void onResponse(Call<TransactionOverall> call, Response<TransactionOverall> response) {
                 if (response.raw().code() == 403 || response.raw().code() == 401) {
@@ -224,8 +226,8 @@ public class ReportActivity extends AppCompatActivity {
                 TransactionOverall transactionOverall = response.body();
 
                 if (transactionOverall == null) return;
-                pieChart1.setData(ChartSdize.monthDetail(transactionOverall, false, pieChart1, getApplicationContext(), year, month));
-                pieChart2.setData(ChartSdize.monthDetail(transactionOverall, true, pieChart2, getApplicationContext(), year, month));
+                pieChart1.setData(ChartSdize.monthDetail(transactionOverall, false, pieChart1, ReportActivity.this, year, month));
+                pieChart2.setData(ChartSdize.monthDetail(transactionOverall, true, pieChart2, ReportActivity.this, year, month));
 
             }
 

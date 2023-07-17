@@ -150,12 +150,12 @@ public class ReportActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-        btnMonth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rackMonthPicker.show();
-            }
-        });
+            btnMonth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rackMonthPicker.show();
+                }
+            });
 
         getChartData();
         Log.d("TAG", "onCreate: " + getToken());

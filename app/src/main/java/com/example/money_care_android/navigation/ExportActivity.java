@@ -35,12 +35,17 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.kal.rackmonthpicker.MonthType;
+import com.kal.rackmonthpicker.RackMonthPicker;
+import com.kal.rackmonthpicker.listener.DateMonthDialogListener;
+import com.kal.rackmonthpicker.listener.OnCancelMonthDialogListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Calendar;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -57,7 +62,11 @@ public class ExportActivity extends AppCompatActivity {
 
     Button btnMonth;
 
-    LinearLayout exportAllLayout;
+    LinearLayout exportAllLayout, exportMonthLayout;
+
+    private int month, year;
+    private Calendar calendar;
+    private RackMonthPicker rackMonthPicker;
 
 
     @Override
@@ -74,6 +83,7 @@ public class ExportActivity extends AppCompatActivity {
         btnMonth = findViewById(R.id.selectMonth);
         btnMonth.setVisibility(View.INVISIBLE);
         exportAllLayout = findViewById(R.id.export_all); //Layout here
+        exportMonthLayout = findViewById(R.id.export_month); //Layout here
         // user
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         if (mUser != null) {
@@ -85,6 +95,32 @@ public class ExportActivity extends AppCompatActivity {
             startActivity(new Intent(ExportActivity.this, LoginActivity.class));
         }
 
+        calendar = Calendar.getInstance();
+        month = getIntent().getIntExtra("month", calendar.get(Calendar.MONTH)+1);
+        year = getIntent().getIntExtra("year", calendar.get(Calendar.YEAR));
+
+        rackMonthPicker = new RackMonthPicker(ExportActivity.this)
+                .setMonthType(MonthType.TEXT)
+                .setPositiveButton(new DateMonthDialogListener() {
+                    @Override
+                    public void onDateMonth(int month, int startDate, int endDate, int year, String monthLabel) {
+                        // log all in 1 log
+                        exportMonth(year, month);
+                    }
+                })
+                .setNegativeButton(new OnCancelMonthDialogListener() {
+                    @Override
+                    public void onCancel(androidx.appcompat.app.AlertDialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+
+        exportMonthLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rackMonthPicker.show();
+            }
+        });
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,6 +232,50 @@ public class ExportActivity extends AppCompatActivity {
                     Log.e("Export", "onFailure: " + t.getMessage());
                 }
             });
+//        } else {
+//            requestStoragePermission();
+//        }
+    }
+
+    private void exportMonth(int year,int month) {
+
+//        if (ContextCompat.checkSelfPermission(
+//                ExportActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+//                PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+//                ExportActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+//                PackageManager.PERMISSION_GRANTED
+//        ) {
+        // You can use the API that requires the permission.
+        ApiService.apiService.exportMonth(getToken(), year, month).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.e("Export", "onResponse: " + response.code());
+                if (response.code() == 200) {
+                    try {
+                        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "export.xlsx");
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                        IOUtils.copyStream(response.body().byteStream(), fileOutputStream);
+                        fileOutputStream.close();
+                        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        downloadManager.addCompletedDownload(file.getName(), file.getName(), true, "text/xlsx", file.getAbsolutePath(), file.length(), true);
+                        Uri xlsxURL = FileProvider.getUriForFile(ExportActivity.this, ExportActivity.this.getApplicationContext().getPackageName() + ".provider", file);
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.setDataAndType(FileProvider.getUriForFile(ExportActivity.this, ExportActivity.this.getApplicationContext().getPackageName() + ".provider", file), "application/vnd.ms-excel");
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(intent);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.e("Export", "onResponse: " + response.code());
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("Export", "onFailure: " + t.getMessage());
+            }
+        });
 //        } else {
 //            requestStoragePermission();
 //        }

@@ -103,9 +103,13 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                amount = Integer.parseInt(amountText.getText().toString());
+                try {
+                    amount = Integer.parseInt(amountText.getText().toString());
+                } catch (NumberFormatException e) {
+                    Toast.makeText(AddTransactionActivity.this, "Amount must be a number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 description = descriptionText.getText().toString();
-
                 category = ((Category) categorySpinner.getSelectedItem()).getId();
                 type = ((Category) categorySpinner.getSelectedItem()).isType();
                 if (type==false){
@@ -158,8 +162,13 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
                         }
                         @Override
                         public void onFailure(Call<Object> call, Throwable t) {
-                            Toast.makeText(AddTransactionActivity.this, "Add Income Failed", Toast.LENGTH_SHORT).show();
                             Log.d("AddTransactionActivity", "onFailure: " + t.getMessage());
+                            if (t.getMessage().equals("timeout")){
+                                Toast.makeText(AddTransactionActivity.this, "Connection Timeout, please", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(AddTransactionActivity.this, "Add Income Failed", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }

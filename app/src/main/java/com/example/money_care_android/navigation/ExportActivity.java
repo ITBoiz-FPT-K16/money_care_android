@@ -1,5 +1,6 @@
 package com.example.money_care_android.navigation;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -8,7 +9,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -21,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.money_care_android.R;
 import com.example.money_care_android.api.ApiService;
@@ -48,6 +52,8 @@ public class ExportActivity extends AppCompatActivity {
     ImageView menu;
     TextView transaction, report, export, logout, hello;
     FirebaseUser mUser;
+
+    private int STORAGE_PERMISSION_CODE = 1;
 
     Button btnMonth;
 
@@ -152,12 +158,12 @@ public class ExportActivity extends AppCompatActivity {
 
     private void exportAll() {
 
-        if (ContextCompat.checkSelfPermission(
-                ExportActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED  && ContextCompat.checkSelfPermission(
-                ExportActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED
-        ) {
+//        if (ContextCompat.checkSelfPermission(
+//                ExportActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+//                PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+//                ExportActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+//                PackageManager.PERMISSION_GRANTED
+//        ) {
             // You can use the API that requires the permission.
             ApiService.apiService.exportAll(getToken()).enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -190,13 +196,47 @@ public class ExportActivity extends AppCompatActivity {
                     Log.e("Export", "onFailure: " + t.getMessage());
                 }
             });
+//        } else {
+//            requestStoragePermission();
+//        }
+    }
+
+    private void requestStoragePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed because of this and that")
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(ExportActivity.this,
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+                        }
+                    })
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+
         } else {
-            // You can directly ask for the permission.
-            // The registered ActivityResultCallback gets the result of this request.
-            ActivityCompat.requestPermissions(ExportActivity.this
-            , new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
         }
+    }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

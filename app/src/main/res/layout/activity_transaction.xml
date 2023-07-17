@@ -123,8 +123,7 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/transaction_recycler_view"/>

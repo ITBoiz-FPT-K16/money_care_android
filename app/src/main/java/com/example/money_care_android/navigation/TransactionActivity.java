@@ -1,5 +1,6 @@
 package com.example.money_care_android.navigation;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -11,30 +12,30 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.money_care_android.R;
 import com.example.money_care_android.adapter.CategoryTransactionAdapter;
-import com.example.money_care_android.adapter.PieDetailAdapter;
 import com.example.money_care_android.api.ApiService;
-import com.example.money_care_android.api.ApiService2;
 import com.example.money_care_android.authentication.LoginActivity;
 import com.example.money_care_android.authentication.LogoutActivity;
 import com.example.money_care_android.models.CategoryList;
-import com.example.money_care_android.models.ChartSdize;
-import com.example.money_care_android.models.TransactionDetail;
 import com.example.money_care_android.models.TransactionOverall;
-import com.example.money_care_android.navigation.details.PieDetailActivity;
-import com.github.mikephil.charting.charts.PieChart;
+import com.example.money_care_android.navigation.addTransaction.AddTransactionActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.kal.rackmonthpicker.MonthType;
+import com.kal.rackmonthpicker.RackMonthPicker;
+import com.kal.rackmonthpicker.listener.DateMonthDialogListener;
+import com.kal.rackmonthpicker.listener.OnCancelMonthDialogListener;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.time.Month;
+import java.util.Calendar;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +43,7 @@ import retrofit2.Response;
 public class TransactionActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     ImageView menu;
-    TextView transaction, report, export, logout, hello, inflowAmount, outflowAmount, totalAmount;
+    TextView transaction, report, export, logout, hello, inflowAmount, outflowAmount, totalAmount, viewReport;
     FirebaseUser mUser;
 
     ExtendedFloatingActionButton addTransaction;
@@ -52,6 +53,11 @@ public class TransactionActivity extends AppCompatActivity {
     private CategoryTransactionAdapter categoryTransactionAdapter;
 
     int month, year;
+    Calendar calendar;
+    private RackMonthPicker rackMonthPicker;
+    Button btnMonth;
+
+
 
 
     @Override
@@ -66,16 +72,12 @@ public class TransactionActivity extends AppCompatActivity {
         export = findViewById(R.id.export);
         logout = findViewById(R.id.logout);
         hello = findViewById(R.id.hello);
-        month = (new Date()).getMonth()+1;
-        year = (new Date()).getYear()+1900;
         inflowAmount = findViewById(R.id.inflowAmount);
         outflowAmount = findViewById(R.id.outflowAmount);
         totalAmount = findViewById(R.id.totalAmount);
-        if (getIntent()!=null){
-            month = getIntent().getIntExtra("month", month);
-            year = getIntent().getIntExtra("year", year);
-        }
         addTransaction = findViewById(R.id.add_transaction);
+        btnMonth = findViewById(R.id.selectMonth);
+        viewReport = findViewById(R.id.viewReport);
         // user
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         if (mUser != null) {
@@ -86,7 +88,15 @@ public class TransactionActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(TransactionActivity.this, LoginActivity.class));
         }
-
+        viewReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransactionActivity.this, ReportActivity.class);
+                intent.putExtra("month", month);
+                intent.putExtra("year", year);
+                startActivity(intent);
+            }
+        });
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +139,36 @@ public class TransactionActivity extends AppCompatActivity {
             }
         });
 
+        calendar = Calendar.getInstance();
+        month = getIntent().getIntExtra("month", calendar.get(Calendar.MONTH)+1);
+        year = getIntent().getIntExtra("year", calendar.get(Calendar.YEAR));
+        btnMonth.setText(month + "/" + year);
+        rackMonthPicker = new RackMonthPicker(TransactionActivity.this)
+                .setMonthType(MonthType.TEXT)
+                .setPositiveButton(new DateMonthDialogListener() {
+                    @Override
+                    public void onDateMonth(int month, int startDate, int endDate, int year, String monthLabel) {
+                        // log all in 1 log
+                        Log.d("TAG", "onDateMonth: " + month + " " + startDate + " " + endDate + " " + year + " " + monthLabel);
+                        Intent intent = new Intent(TransactionActivity.this, TransactionActivity.class);
+                        intent.putExtra("month", month);
+                        intent.putExtra("year", year);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(new OnCancelMonthDialogListener() {
+                    @Override
+                    public void onCancel(AlertDialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+        btnMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rackMonthPicker.show();
+            }
+        });
+
         getChartData();
     }
 
@@ -161,9 +201,6 @@ public class TransactionActivity extends AppCompatActivity {
     }
 
     void getChartData() {
-        int year = getIntent().getIntExtra("year", 2023); //hardcode
-        int month = getIntent().getIntExtra("month", 07);
-        boolean type = getIntent().getBooleanExtra("type", true);
         ApiService.apiService.getTransactionOverall(getToken(), year, month).enqueue(new Callback<TransactionOverall>() {
             @Override
             public void onResponse(Call<TransactionOverall> call, Response<TransactionOverall> response) {

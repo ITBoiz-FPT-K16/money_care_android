@@ -43,13 +43,13 @@ public interface ApiService {
     );
 
     @POST("incomes")
-    Call<Income> addIncome(
+    Call<Object> addIncome(
             @Header("Authorization") String accessToken,
             @Body Income income
     );
 
     @POST("expenses")
-    Call<Expense> addExpense(
+    Call<Object> addExpense(
             @Header("Authorization") String accessToken,
             @Body Expense expense
             );

@@ -4,24 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".navigation.details.PieDetailActivity">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="20dp">
+        <ImageView
+            android:id="@+id/back_button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_back_ios_24" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar_title"
+            android:layout_marginLeft="20dp"
+            android:text="Detail Pie Chart"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+    </LinearLayout>
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/drawer_layout"
-
+        android:layout_marginTop="60dp"
         tools:context=".navigation.ReportActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
+
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include
-                android:id="@+id/toolbar"
-                layout="@layout/toolbar" />
-
-            <!--            Month Select box-->
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pie_chart_detail"

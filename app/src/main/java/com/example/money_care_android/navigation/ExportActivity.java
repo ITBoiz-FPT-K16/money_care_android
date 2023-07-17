@@ -7,14 +7,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.money_care_android.R;
 import com.example.money_care_android.authentication.LoginActivity;
 import com.example.money_care_android.authentication.LogoutActivity;
+import com.example.money_care_android.navigation.addTransaction.AddTransactionActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,6 +26,8 @@ public class ExportActivity extends AppCompatActivity {
     FirebaseUser mUser;
 
     ExtendedFloatingActionButton addTransaction;
+
+    Button btnMonth;
 
 
     @Override
@@ -39,6 +42,8 @@ public class ExportActivity extends AppCompatActivity {
         logout = findViewById(R.id.logout);
         hello = findViewById(R.id.hello);
         addTransaction = findViewById(R.id.add_transaction);
+        btnMonth = findViewById(R.id.selectMonth);
+        btnMonth.setVisibility(View.INVISIBLE);
         // user
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         if (mUser != null) {

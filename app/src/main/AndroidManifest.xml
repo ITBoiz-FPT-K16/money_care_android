@@ -22,7 +22,7 @@
             android:name=".navigation.details.PieDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".navigation.AddTransactionActivity"
+            android:name=".navigation.addTransaction.AddTransactionActivity"
             android:exported="false" />
         <activity
             android:name=".authentication.LogoutActivity"

@@ -22,12 +22,28 @@
                 android:id="@+id/toolbar"
                 layout="@layout/toolbar" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="400dp"
-                android:text="Export" />
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/export_all">
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/export_icon" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Export all data"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"/>
+
+            </LinearLayout>
         </LinearLayout>
 
         <RelativeLayout
@@ -42,15 +58,4 @@
 
         </RelativeLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/add_transaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:layout_gravity="bottom|right"
-        android:text="@string/add_transaction"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/white"
-        app:iconTint="@color/white"
-        app:icon="@drawable/baseline_add_circle_24"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

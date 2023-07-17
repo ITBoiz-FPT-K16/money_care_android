@@ -8,6 +8,7 @@ import com.example.money_care_android.models.TransactionOverall;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -40,6 +41,24 @@ public interface ApiService {
     @GET("transactions/total")
     Call<Long> getTransactionTotal(
             @Header("Authorization") String accessToken
+    );
+
+    @GET("export")
+    Call<ResponseBody> exportAll(
+            @Header("Authorization") String accessToken
+    );
+
+    @GET("export/{year}")
+    Call<ResponseBody> exportYear(
+            @Header("Authorization") String accessToken,
+            @Path("year") int year
+    );
+
+    @GET("export/{year}/{month}")
+    Call<ResponseBody> exportMonth(
+            @Header("Authorization") String accessToken,
+            @Path("year") int year,
+            @Path("month") int month
     );
 
     @POST("incomes")

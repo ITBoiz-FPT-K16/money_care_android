@@ -4,7 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".navigation.addTransaction.AddTransactionActivity">
+    tools:context=".navigation.addTransaction.EditTransactionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="Add Transaction"
+                android:text="Edit Transaction"
                 android:textColor="@color/black"
                 android:textSize="25dp" />
         </LinearLayout>
@@ -97,12 +97,34 @@
                 android:backgroundTint="@color/white"
                 android:hint="Enter Category" />
 
-            <Button
-                android:id="@+id/add_transaction"
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/green"
-                android:text="Add Transaction" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="5">
+                <Button
+                    android:id="@+id/delete_transaction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/brightRed"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="2"
+                    android:layout_marginRight="10dp"
+
+                    android:text="Delete" />
+                <Button
+                    android:id="@+id/add_transaction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/green"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="2"
+                    android:layout_marginLeft="10dp"
+                    android:text="Update" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
 

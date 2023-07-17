@@ -57,9 +57,6 @@ public class TransactionActivity extends AppCompatActivity {
     private RackMonthPicker rackMonthPicker;
     Button btnMonth;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

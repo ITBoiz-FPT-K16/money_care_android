@@ -67,7 +67,7 @@ public class AddTransactionActivity extends AppCompatActivity implements CustomS
         categorySpinner.setSpinnerEventsListener(this);
         categorySpinner.setAdapter(categoryAdapter);
         calendar = Calendar.getInstance();
-        Year = calendar.get(Calendar.YEAR) ;
+        Year = calendar.get(Calendar.YEAR);
         Month = calendar.get(Calendar.MONTH);
         Day = calendar.get(Calendar.DAY_OF_MONTH);
         d = calendar.getTime();

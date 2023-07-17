@@ -26,6 +26,24 @@ public class CategoryAdapter extends BaseAdapter {
         this.categoryList = categoryList;
     }
 
+    public int getCategoryExpensePosition(String id) {
+        for (int i = 0; i < categoryList.size(); i++) {
+            if (categoryList.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public int getCategoryIncomePosition(String id) {
+        for (int i = 0; i < categoryList.size(); i++) {
+            if (categoryList.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     @Override
     public int getCount() {
         return categoryList != null ? categoryList.size() : 0;
